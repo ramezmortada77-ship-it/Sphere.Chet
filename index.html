@@ -1,371 +1,334 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>سفير — Sphere</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg: #0F1A19;
-    --surface: #16241F;
-    --surface-2: #1D2E28;
-    --border: #26362F;
-    --text: #ECE9DF;
-    --text-dim: #8FA39A;
-    --teal: #3FA796;
-    --teal-dim: #1F4A42;
-    --amber: #E8A33D;
-    --amber-dim: #4A3A1C;
-    --coral: #E0654F;
-    --coral-dim: #4A241C;
-    --radius: 14px;
-  }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html,body{height:100%;}
-  body{
-    font-family:'Tajawal', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    display:flex;
-    justify-content:center;
-    min-height:100vh;
-  }
-  .phone{
-    width:100%;
-    max-width:420px;
-    min-height:100vh;
-    background: var(--bg);
-    display:flex;
-    flex-direction:column;
-    position:relative;
-    overflow:hidden;
-    border-inline:1px solid var(--border);
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>سفير — Sphere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0F1A19;
+      --surface: #16241F;
+      --surface-2: #1D2E28;
+      --border: #26362F;
+      --text: #ECE9DF;
+      --text-dim: #8FA39A;
+      --teal: #3FA796;
+      --teal-dim: #1F4A42;
+      --amber: #E8A33D;
+    }
 
-  /* ---- Top bar ---- */
-  .topbar{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:16px 18px 8px;
-  }
-  .brand{ display:flex; align-items:center; gap:10px; }
-  .brand-mark{ width:34px; height:34px; flex-shrink:0; }
-  .brand-mark svg{ width:100%; height:100%; display:block; }
-  .brand-name{ font-weight:900; font-size:18px; letter-spacing:.3px; }
-  .brand-name span{ color: var(--teal); }
-  .top-actions{ display:flex; gap:8px; align-items:center; }
-  .avatar-btn{
-    width:32px; height:32px; border-radius:50%;
-    background: var(--surface-2);
-    border:1px solid var(--border);
-    display:flex; align-items:center; justify-content:center;
-    font-weight:700; font-size:12px; color:var(--text-dim);
-    cursor:pointer;
-  }
+    body.light-theme {
+      --bg: #F5F7F6;
+      --surface: #FFFFFF;
+      --surface-2: #E8EFE8;
+      --border: #D1DCD6;
+      --text: #111B18;
+      --text-dim: #5C7067;
+      --teal: #2A8575;
+      --teal-dim: #D4ECE7;
+    }
 
-  /* ---- Tabs ---- */
-  .tabs{ display:flex; gap:3px; padding:4px 8px 12px; }
-  .tab{
-    flex:1; text-align:center; padding:8px 2px; border-radius:9px;
-    font-size:11px; font-weight:700; color: var(--text-dim);
-    background:transparent; border:none; cursor:pointer;
-    transition: background .15s, color .15s; white-space:nowrap;
-  }
-  .tab.active{ background: var(--surface-2); color: var(--text); }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+      user-select: none;
+    }
 
-  /* ---- Screens ---- */
-  .screen{ display:none; flex-direction:column; flex:1; min-height:0; }
-  .screen.active{ display:flex; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
 
-  /* ---- Search Bar & Add Contact ---- */
-  .search-box{
-    padding:8px 12px; display:flex; gap:8px;
-  }
-  .search-input{
-    flex:1; background: var(--surface-2); border:1px solid var(--border);
-    border-radius:10px; padding:8px 12px; color: var(--text);
-    font-family:inherit; font-size:13px; outline:none;
-  }
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      height: 100vh;
+      background-color: var(--bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
 
-  /* ---- List ---- */
-  .list{ flex:1; overflow-y:auto; padding: 4px 12px 24px; }
-  .row{
-    display:flex; align-items:center; gap:12px; padding:12px 8px;
-    border-radius:12px; cursor:pointer;
-  }
-  .row:active{ background: var(--surface); }
-  .row-avatar{
-    width:46px; height:46px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    font-weight:700; font-size:15px; flex-shrink:0;
-    background: var(--surface-2); color: var(--teal);
-    border:1px solid var(--border);
-  }
-  .row-body{ flex:1; min-width:0; }
-  .row-top{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
-  .row-name{ font-weight:700; font-size:15px; display:flex; align-items:center; gap:6px; }
-  .row-time{ font-size:11px; color: var(--text-dim); flex-shrink:0; }
-  .row-sub{
-    font-size:13px; color: var(--text-dim);
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px;
-  }
-  .badge{
-    background: var(--teal); color:#06201B; font-size:11px; font-weight:900;
-    min-width:20px; height:20px; border-radius:10px; display:flex;
-    align-items:center; justify-content:center; padding:0 6px;
-  }
+    header {
+      background-color: var(--surface);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
 
-  /* ---- Add Status ---- */
-  .add-status{ display:flex; align-items:center; gap:12px; padding:12px 8px; cursor:pointer; }
-  .add-status-avatar{
-    width:46px; height:46px; border-radius:50%; background: var(--surface-2);
-    border:1px dashed var(--border); display:flex; align-items:center;
-    justify-content:center; color: var(--teal); font-size:20px; font-weight:900;
-  }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-  /* ---- Meetings Tab Hero ---- */
-  .meet-hero{
-    margin:6px 4px 10px; padding:16px;
-    background: linear-gradient(135deg, var(--teal-dim), var(--surface-2));
-    border-radius:16px; border:1px solid var(--border);
-  }
-  .meet-hero-title{ font-weight:900; font-size:16px; margin-bottom:4px; }
-  .meet-hero-sub{ font-size:12.5px; color: var(--text-dim); margin-bottom:12px; line-height:1.6; }
-  .meet-hero-actions{ display:flex; gap:8px; }
-  .btn{
-    flex:1; padding:11px; border-radius:11px; border:none;
-    font-family:inherit; font-weight:700; font-size:13px; cursor:pointer;
-  }
-  .btn-primary{ background: var(--teal); color:#06201B; }
-  .btn-ghost{ background: var(--surface); color: var(--text); border:1px solid var(--border); }
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: radial-gradient(circle, var(--teal) 0%, var(--teal-dim) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 10px rgba(63, 167, 150, 0.4);
+    }
 
-  /* ---- Conversation Screen ---- */
-  .conv-header{
-    display:flex; align-items:center; gap:10px;
-    padding:14px 14px; border-bottom:1px solid var(--border);
-  }
-  .icon-btn{
-    width:36px; height:36px; border-radius:50%; background: var(--surface-2);
-    border:1px solid var(--border); color: var(--text); font-size:15px;
-    display:flex; align-items:center; justify-content:center; cursor:pointer;
-  }
-  .conv-title{ flex:1; min-width:0; }
-  .conv-name{ font-weight:700; font-size:15px; }
-  .conv-status{ font-size:12px; color: var(--teal); }
-  .conv-actions{ display:flex; gap:8px; }
+    .logo-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--text);
+    }
 
-  .messages{ flex:1; overflow-y:auto; padding:16px 14px; display:flex; flex-direction:column; gap:10px; }
-  .bubble{ max-width:75%; padding:10px 13px; border-radius:16px; font-size:14px; line-height:1.6; }
-  .bubble.in{ align-self:flex-start; background: var(--surface-2); border-bottom-right-radius:4px; }
-  .bubble.out{ align-self:flex-end; background: var(--teal-dim); border:1px solid rgba(63,167,150,.35); border-bottom-left-radius:4px; }
-  .bubble-time{ font-size:10px; color: var(--text-dim); margin-top:4px; display:block; }
+    .brand-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+    }
 
-  .composer{ display:flex; align-items:center; gap:8px; padding:10px 12px 18px; border-top:1px solid var(--border); }
-  .composer input{
-    flex:1; background: var(--surface-2); border:1px solid var(--border);
-    border-radius:20px; padding:11px 16px; color: var(--text);
-    font-family:inherit; font-size:14px; outline:none;
-  }
-  .send-btn{
-    width:42px; height:42px; border-radius:50%; background: var(--teal);
-    color:#06201B; border:none; font-size:16px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-  }
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
 
-  /* ---- Settings ---- */
-  .setting-row{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:14px 16px; border-bottom:1px solid var(--border);
-  }
-  .setting-title{ font-weight:700; font-size:14.5px; }
-  .setting-sub{ font-size:12px; color: var(--text-dim); margin-top:2px; }
+    .icon-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      transition: 0.2s;
+    }
 
-  /* ---- Onboarding ---- */
-  .onboard{ flex:1; display:flex; flex-direction:column; padding:40px 26px 30px; text-align:center; }
-  .onboard-title{ font-weight:900; font-size:21px; margin-bottom:10px; }
-  .onboard-sub{ font-size:13.5px; color: var(--text-dim); line-height:1.7; margin-bottom:30px; }
-  .phone-row{ display:flex; gap:8px; margin-bottom:18px; }
-  .cc-box{
-    width:64px; background: var(--surface-2); border:1px solid var(--border);
-    border-radius:11px; display:flex; align-items:center; justify-content:center;
-    font-weight:700; font-size:14px; flex-shrink:0;
-  }
-  .onboard input[type="text"], .onboard input[type="tel"]{
-    flex:1; width:100%; background: var(--surface-2); border:1px solid var(--border);
-    border-radius:11px; padding:13px 14px; color: var(--text);
-    font-family:inherit; font-size:15px; outline:none;
-  }
-  .otp-row{ display:flex; gap:8px; justify-content:center; margin-bottom:20px; }
-  .otp-row input{
-    width:45px; height:50px; text-align:center; font-size:18px;
-    font-weight:700; background: var(--surface-2); border:1px solid var(--border);
-    border-radius:10px; color: var(--text);
-  }
-  ::-webkit-scrollbar{ display:none; }
-</style>
+    .icon-btn:hover {
+      background-color: var(--surface-2);
+      color: var(--text);
+    }
+
+    .tabs {
+      display: flex;
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 12px 0;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-dim);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: 0.2s;
+    }
+
+    .tab.active {
+      color: var(--teal);
+      border-bottom-color: var(--teal);
+    }
+
+    .search-bar {
+      padding: 12px 16px;
+      background-color: var(--bg);
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background-color: var(--surface);
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .chat-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+
+    .chat-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      gap: 14px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .chat-item:hover {
+      background-color: var(--surface);
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background-color: var(--teal-dim);
+      color: var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      position: relative;
+    }
+
+    .online-dot {
+      width: 12px;
+      height: 12px;
+      background-color: #4CAF50;
+      border: 2px solid var(--bg);
+      border-radius: 50%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+
+    .chat-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .chat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-name {
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .chat-time {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .chat-last-msg {
+      font-size: 13px;
+      color: var(--text-dim);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .badge {
+      background-color: var(--teal);
+      color: var(--bg);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+      align-self: flex-end;
+    }
+
+    .fab {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: var(--teal);
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      cursor: pointer;
+      border: none;
+      font-size: 24px;
+    }
+  </style>
 </head>
 <body>
-
-<div class="phone">
-  <!-- Topbar -->
-  <div class="topbar">
-    <div class="brand">
-      <div class="brand-mark">
-        <svg viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="16" stroke="#3FA796" stroke-width="3"/><circle cx="18" cy="18" r="8" fill="#3FA796"/></svg>
+  <div class="app-container">
+    <header>
+      <div class="brand">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke-width="2"/></svg>
+        </div>
+        <div class="brand-title">سفير — Sphere</div>
       </div>
-      <div class="brand-name">سفير <span>Sphere</span></div>
+      <div class="header-actions">
+        <button class="icon-btn" id="theme-toggle" title="تبديل المظهر">🌓</button>
+        <button class="icon-btn">⚙️</button>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <div class="tab active">المحادثات</div>
+      <div class="tab">القنوات</div>
+      <div class="tab">البوتات</div>
     </div>
-    <div class="top-actions">
-      <div class="avatar-btn" onclick="switchScreen('settings-screen')">⚙️</div>
+
+    <div class="search-bar">
+      <input type="text" class="search-input" placeholder="بحث برقم الهاتف أو اسم المستخدم...">
     </div>
-  </div>
 
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('chats-screen', this)">المحادثات</button>
-    <button class="tab" onclick="switchTab('status-screen', this)">الحالات</button>
-
-    <button class="tab" onclick="switchTab('meetings-screen', this)">الاجتماعات</button>
-  </div>
-
-  <!-- Chat Search & Add by Username/Phone -->
-  <div class="search-box">
-    <input type="text" class="search-input" placeholder="بحث برقم الهاتف أو اسم المستخدم (@username)...">
-  </div>
-
-  <!-- Screen 1: Chats -->
-  <div id="chats-screen" class="screen active">
-    <div class="list">
-      <div class="row" onclick="openChat('مجموعة التطوير', 'متصل الآن')">
-        <div class="row-avatar">👥</div>
-        <div class="row-body">
-          <div class="row-top">
-            <span class="row-name">فريق عمل سفير</span>
-            <span class="row-time">10:42 ص</span>
+    <div class="chat-list">
+      <div class="chat-item">
+        <div class="avatar">
+          أ
+          <div class="online-dot"></div>
+        </div>
+        <div class="chat-info">
+          <div class="chat-header">
+            <span class="chat-name">أحمد محمود</span>
+            <span class="chat-time">10:42 م</span>
           </div>
-          <div class="row-sub">تم تجهيز الهيكلية الكاملة للواجهة</div>
+          <div class="chat-last-msg">أهلاً بك في تطبيق سفير! التطبيق يعمل بنجاح 🎉</div>
         </div>
-        <div class="badge">3</div>
+        <span class="badge">1</span>
       </div>
-      <div class="row" onclick="openChat('الدعم الفني', 'سفير Bot')">
-        <div class="row-avatar">🤖</div>
-        <div class="row-body">
-          <div class="row-top">
-            <span class="row-name">مساعد سفير الذكي</span>
-            <span class="row-time">أمس</span>
+
+      <div class="chat-item">
+        <div class="avatar" style="background-color: #2E3B4E; color: #64B5F6;">
+          ق
+        </div>
+        <div class="chat-info">
+          <div class="chat-header">
+            <span class="chat-name">قناة التحديثات الرسمية</span>
+            <span class="chat-time">أمس</span>
           </div>
-          <div class="row-sub">أهلاً بك! كيف يمكنني مساعدتك اليوم؟</div>
+          <div class="chat-last-msg">تم إطلاق النسخة التجريبية الأولى بنجاح...</div>
         </div>
       </div>
     </div>
+
+    <button class="fab">+</button>
   </div>
 
-  <!-- Screen 2: Status -->
-  <div id="status-screen" class="screen">
-    <div class="list">
-      <div class="add-status">
-        <div class="add-status-avatar">+</div>
-        <div class="row-body">
-          <div class="row-name">حالاتي</div>
-          <div class="row-sub">إضافة تحديث جديد</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Screen 3: Meetings -->
-  <div id="meetings-screen" class="screen">
-    <div class="meet-hero">
-      <div class="meet-hero-title">اجتماعات فيديو عالية الدقة</div>
-      <div class="meet-hero-sub">إنشاء رابط اجتماع سريع أو الانضمام بنقرة واحدة بدون حدود زمنية.</div>
-      <div class="meet-hero-actions">
-        <button class="btn btn-primary">بدء اجتماع جديد</button>
-        <button class="btn btn-ghost">الانضمام برابط</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Screen 4: Conversation -->
-  <div id="chat-view" class="screen">
-    <div class="conv-header">
-      <button class="icon-btn" onclick="switchScreen('chats-screen')">➔</button>
-      <div class="conv-title">
-        <div class="conv-name" id="chat-title">المحادثة</div>
-        <div class="conv-status" id="chat-status">متصل</div>
-      </div>
-      <div class="conv-actions">
-        <button class="icon-btn call">📞</button>
-        <button class="icon-btn video">📹</button>
-      </div>
-    </div>
-    <div class="messages">
-      <div class="bubble in">
-        مرحباً بك في تطبيق سفير المطور!
-        <span class="bubble-time">10:40 ص</span>
-      </div>
-      <div class="bubble out">
-        تمت إضافة إمكانية البحث برقم الهاتف وسم المستخدم وإلغاء القفل المحلي.
-        <span class="bubble-time">10:41 ص</span>
-      </div>
-    </div>
-    <div class="composer">
-      <input type="text" placeholder="اكتب رسالة...">
-      <button class="send-btn">➤</button>
-    </div>
-  </div>
-
-  <!-- Screen 5: Settings -->
-  <div id="settings-screen" class="screen">
-    <div class="settings-list">
-      <div class="setting-row">
-        <div class="setting-text">
-          <div class="setting-title">إعدادات الخصوصية والأمان</div>
-          <div class="setting-sub">التشفير التام، إخفاء الظهور، وإدارة الأجهزة المربوطة</div>
-        </div>
-      </div>
-      <div class="setting-row">
-        <div class="setting-text">
-          <div class="setting-title">اسم المستخدم (@username)</div>
-          <div class="setting-sub">تعيين اسم مستخدم فريد ليتمكن الآخرون من البحث عنك</div>
-        </div>
-      </div>
-      <div class="setting-row" onclick="switchScreen('chats-screen')">
-        <div class="setting-text">
-          <div class="setting-title" style="color:var(--teal)">العودة للمحادثات</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-  function switchTab(screenId, tabBtn) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.getElementById(screenId).classList.add('active');
-    tabBtn.classList.add('active');
-  }
-
-  function switchScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(screenId).classList.add('active');
-  }
-
-  function openChat(name, status) {
-    document.getElementById('chat-title').innerText = name;
-    document.getElementById('chat-status').innerText = status;
-    switchScreen('chat-view');
-  }
-</script>
+  <script>
+    const themeBtn = document.getElementById('theme-toggle');
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+    });
+  </script>
 </body>
 </html>
-/* الوضع الفاتح (Light Mode) عند التفعيل من الإعدادات */
-body.light-theme {
-  --bg: #F5F7F6;
-  --surface: #FFFFFF;
-  --surface-2: #E8EFE8;
-  --border: #D1DCD6;
-  --text: #111B18;
-  --text-dim: #5C7067;
-}
